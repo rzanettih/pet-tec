@@ -13,18 +13,20 @@ import { AppComponent } from './app.component';
 import { MenuComponent } from './menu/menu.component';
 import { HomeComponent } from './home/home.component';
 import { ProductsComponent } from './products/products.component';
+import { ProductListItemComponent } from './products/product-list-item/product-list-item.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MenuComponent,
     HomeComponent,
-    ProductsComponent
+    ProductsComponent,
+    ProductListItemComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    AngularFireModule.initializeApp(environment.config),
+    AngularFireModule.initializeApp(environment.connConfig),
     AngularFirestoreModule,
     FormsModule,
     BrowserAnimationsModule,

@@ -1,5 +1,16 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto+Condensed');
+@import url('https://fonts.googleapis.com/css?family=Raleway');
 @import url("https://use.fontawesome.com/releases/v5.0.6/css/all.css");
+
+.container {
+    position: relative;
+}
+
+h3 {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 2em;
+    margin-bottom: 25px;
+}
 
 .form-validation-error {
     margin-top: 10px;
@@ -10,4 +21,34 @@
 
 input {
     text-transform: uppercase;
+}
+
+.form-item-label {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 10px;
+    color: rgb(99, 99, 99);
+}
+
+.form-item {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 12px;
+}
+
+.form-error-label {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 12px;
+    margin: 15px 0 0 5px;
+    color: #CE1661;
+}
+
+.li-list-item {
+    margin-top: 10px;
+}
+
+form {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f1f1f1;
+    padding: 15px;
+    margin: 15px 0 15px 0;
 }

@@ -1,5 +1,4 @@
 .menu {
-    
     position: fixed;
     background-color: #435B87;
     width: 90%;
@@ -55,6 +54,7 @@
 
 .top{
     position: fixed;
+    z-index: 998;
     left: 0;
     right: 0;
     top: 0;
@@ -89,7 +89,6 @@
         background-color: #435B87;
         float: left;
         height: 50px;
-        z-index: 999;
         top: 0px;
         left: 0px;
         right: 0px;

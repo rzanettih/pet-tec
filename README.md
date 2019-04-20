@@ -2,4 +2,6 @@
 MVP of a system for pet shop
 
 # Dependencies
-- firestore
+-- firestore
+-- ngx-toastr
+-- @angular/animations

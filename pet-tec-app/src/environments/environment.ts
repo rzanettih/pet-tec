@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  config: {
+  connConfig: {
     apiKey: "AIzaSyBVElycWkfjRg_ZD000sz8f7v2UMqRKpsQ",
     authDomain: "petshopamanimalteste.firebaseapp.com",
     databaseURL: "https://petshopamanimalteste.firebaseio.com",

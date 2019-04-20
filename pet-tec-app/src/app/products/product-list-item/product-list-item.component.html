@@ -1,0 +1,10 @@
+<div class="product-container">
+  <label class="id-label form-item-label">Código</label>
+  <div class="id form-item">{{productItem.id}}</div>
+  <label class="date-label form-item-label">Data Adicionado</label>
+  <div class="dateAdded form-item">{{productItem.dateAdded}}</div>
+  <label class="type-label form-item-label">Tipo</label>
+  <div class="type form-item"><span [class]="productItem.type == 'S' ? 'alert-warning': 'alert-primary'">{{productItem.type == "S" ? "SERVIÇO": "PRODUTO"}}</span></div>
+  <label class="productName-label form-item-label">Nome</label>
+  <div class="productName form-item">{{productItem.productName}}</div>
+</div>
