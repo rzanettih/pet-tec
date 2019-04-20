@@ -1,0 +1,14 @@
+.page-content {
+    width: 100%;
+    margin: 70px 0 0 0;
+    padding: 10px;
+    position: relative;
+}
+
+/* TODO: O conteudo da pagina passa por cima do menu/topo. Se eu set o z-index=-1 arruma mas ai nao clica nos botoes */
+
+@media screen and (min-width: 600px) {
+    .page-content {
+        margin: 55px 0 0 0;
+    }
+}
