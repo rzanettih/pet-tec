@@ -5,3 +5,4 @@ MVP of a system for pet shop
 -- firestore
 -- ngx-toastr
 -- @angular/animations
+-- ngx-bootstrap

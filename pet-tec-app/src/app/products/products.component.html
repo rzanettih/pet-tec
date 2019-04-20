@@ -15,7 +15,8 @@
         </select>
       </div>
       <div class="form-group">
-        <button type="submit" class="btn btn-info" id="btn-submit" [disabled]="!form.valid">Salvar</button>
+        <button type="submit" class="btn btn-info" id="btn-submit" [disabled]="!form.valid">Salvar</button>&nbsp;
+        <button type="button" class="btn btn-secondary" id="btn-cancel-edit" (click)="cancelEdit()" *ngIf="isUpdate">Cancelar edição</button>
       </div>
   </form>
   <div class="row">
@@ -25,8 +26,26 @@
   <div class="row">
     <div class="col-12">
         <ul class="list-group" *ngFor="let product of productService.filteredProducts">
-            <li class="list-group-item li-list-item" *ngIf="product"><app-product-list-item [productItem]="product"></app-product-list-item></li>
+            <li class="list-group-item li-list-item" *ngIf="product"><app-product-list-item [productItem]="product" (delete)="onDeleteProduct($event, modalConfirmDeletion)" (edit)="onEditProduct($event)"></app-product-list-item></li>
         </ul>
     </div>
   </div>
 </div>
+
+<ng-template #modalConfirmDeletion>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title">Confirmação</h5>
+      <button type="button" class="close" (click)="cancelDel()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>Certeza que quer excluir {{productToDelete ? productToDelete.productName : ""}}?</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="confirmDel()">Sim</button>
+        <button type="button" class="btn btn-secondary" (click)="cancelDel()">Não</button>
+    </div>
+  </div>
+</ng-template>
