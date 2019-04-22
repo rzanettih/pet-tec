@@ -1,0 +1,61 @@
+<div class="container">
+  <div class="row" id="btnAddInventory" class="btn-container">
+    <button type="button" class="btn-add-inventory" (click)="actionAdd=true" *ngIf="!actionAdd">+ estoque</button>
+    <button type="button" class="btn-toggle-inventory-list" (click)="showList=!showList" *ngIf="productItem.inventoryList && productItem.inventoryList.length > 0">lista de entradas em estoque</button>
+  </div>
+  <div class="row" id="formAddInventory" *ngIf="actionAdd">
+    <form class="add-inventory-container" #formAddInventory="ngForm" autocomplete="off" (submit)="formAddInventorySubmit(formAddInventory)">
+      <div class="qtty">
+          <label for="qtty" class="form-item-label">Qtde:</label>
+          <input type="number" class="form-control" id="qtty" name="qtty" #qtty="ngModel" [(ngModel)]="inventoryInContext.qtty" placeholder="1" required>
+      </div>
+      <div class="cost">
+          <label for="cost" class="form-item-label">Valor de custo:</label>
+        <input type="number" class="form-control" id="cost" name="cost" #cost="ngModel" [(ngModel)]="inventoryInContext.cost" placeholder="0.00" required>
+      </div>
+      <div class="price">
+          <label for="price" class="form-item-label">Preço de venda:</label>
+          <input type="number" class="form-control" id="price" name="price" #price="ngModel" [(ngModel)]="inventoryInContext.price" placeholder="0.00" required>
+      </div>
+      <div class="date">
+          <label for="date" class="form-item-label">Data do pedido:</label>
+          <input type="date" class="form-control" id="date" name="date" #date="ngModel" [(ngModel)]="inventoryInContext.date">
+      </div>
+      <div class="invoice">
+          <label for="qtty" class="form-item-label">Número NF:</label>
+          <input type="text" class="form-control" id="invoice" name="invoice" #invoice="ngModel" [(ngModel)]="inventoryInContext.invoice" placeholder="NF NUMERO">
+      </div>
+      <div class="btn" style="margin-top: 15px"><button type="submit" class="btn btn-info" [disabled]="!formAddInventory.valid">+</button>&nbsp;<button type="button" class="btn btn-secondary" (click)="actionAdd=false">-</button></div>
+    </form>
+  </div>
+  <div class="row" id="listInventory" class="inventory-list" *ngIf="showList">
+    <div class="table-responsive">
+      <table class="table table-sm table-hover">
+        <thead>
+          <tr>
+            <th scope="col" style="width: 10%">Qtde</th>
+            <th scope="col" style="width: 15%">Custo</th>
+            <th scope="col" style="width: 15%">Preço de venda</th>
+            <th scope="col" style="width: 10%">Lucro</th>
+            <th scope="col" style="width: 15%">Data pedido</th>
+            <th scope="col" style="width: 15%">NF</th>
+            <th scope="col" style="width: 10%">Data adicionado</th>
+            <th scope="col" style="width: 10%"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let inventory of productItem.inventoryList">
+            <td>{{inventory.qtty}}</td>
+            <td>R$ {{inventory.cost.toFixed(2)}}</td>
+            <td>R$ {{inventory.price.toFixed(2)}}</td>
+            <td>{{(((inventory.price - inventory.cost)/inventory.cost) * 100).toFixed(0)}}%</td>
+            <td>{{inventory.date}}</td>
+            <td>{{inventory.invoice}}</td>
+            <td>{{inventory.dateAdded}}</td>
+            <td><button class="btn btn-danger">Del</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

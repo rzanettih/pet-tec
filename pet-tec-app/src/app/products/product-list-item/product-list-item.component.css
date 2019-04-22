@@ -2,8 +2,11 @@
     width: 100%;
     display: grid;
     grid-template-columns: auto;
-    grid-template-rows: auto auto 10px auto auto 10px auto auto 10px auto auto 10px auto;
+    grid-template-rows: auto auto 10px auto auto 10px auto auto 10px auto auto 10px auto 10px auto;
     grid-template-areas: 
+        "productName-label"
+        "productName"
+        "."
         "id-label"
         "id"
         "."
@@ -13,10 +16,9 @@
         "type-label"
         "type"
         "."
-        "productName-label"
-        "productName"
+        "actions"
         "."
-        "actions";
+        "inventory";
 }
 
 .id-label {
@@ -61,19 +63,25 @@
     padding-top: 10px;
 }
 
+.inventory {
+    grid-area: inventory;
+}
+
 @media screen and (min-width: 600px) {
 
     .product-container {
         grid-template-columns: auto 10px auto 10px 10%;
-        grid-template-rows: auto auto 10px auto auto 10px auto;
+        grid-template-rows: auto auto 10px auto auto 10px auto 10px auto;
         grid-template-areas: 
-            "id-label . date-label . type-label"
-            "id . dateAdded . type"
-            ". . . . ."
             "productName-label productName-label productName-label productName-label productName-label"
             "productName productName productName productName productName"
             ". . . . ."
-            "actions actions actions actions actions";
+            "id-label . date-label . type-label"
+            "id . dateAdded . type"
+            ". . . . ."
+            "actions actions actions actions actions"
+            ". . . . ."
+            "inventory inventory inventory inventory inventory";
     }
 
 }

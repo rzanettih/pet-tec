@@ -1,0 +1,75 @@
+.btn-container {
+    text-align: right;
+}
+
+.btn-add-inventory {
+    border-radius: 20px;
+    background-color: #0B486B;
+    color: #fff;
+    padding: 5px 15px 5px 10px;
+    cursor: pointer;
+    margin-right: 10px;
+    font-size: 10px;
+}
+
+.btn-toggle-inventory-list {
+    border-radius: 20px;
+    background-color: rgb(61, 131, 113);
+    color: #fff;
+    padding: 5px 15px 5px 10px;
+    cursor: pointer;
+    font-size: 10px;
+}
+
+.add-inventory-container {
+    display: grid;
+    grid-auto-columns: auto;
+    grid-auto-rows: auto 10px auto 10px auto 10px auto 10px auto 10px auto;
+    grid-template-areas: "qtty" "." "cost" "." "price" "." "date" "." "invoice" "." "btn";
+    align-items: center;
+    vertical-align: middle;
+    align-self: center;
+}
+
+.qtty {
+    grid-area: qtty;
+}
+
+.cost {
+    grid-area: cost;
+}
+
+.price {
+    grid-area: price;
+}
+
+.date {
+    grid-area: date;
+}
+
+.invoice {
+    grid-area: invoice;
+}
+
+.btn{
+    grid-area: btn;
+}
+
+.inventory-list {
+    padding: 10px;
+    font-size: 11px;
+}
+
+/* This is for browser when area is larger than 600px */
+@media screen and (min-width: 600px) {
+
+    .add-inventory-container {
+        width: 100%;
+        display: grid;
+        grid-auto-columns: 10% 10px 20% 10px 20% 10px auto 10px auto 10px auto;
+        grid-auto-rows: auto;
+        grid-template-areas: "qtty . cost . price . date . invoice . btn";
+    }
+    
+
+}

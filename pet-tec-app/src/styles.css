@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto+Condensed');
 @import url('https://fonts.googleapis.com/css?family=Raleway');
-@import url("https://use.fontawesome.com/releases/v5.0.6/css/all.css");
 
 .container {
     position: relative;
@@ -25,13 +24,13 @@ input {
 
 .form-item-label {
     font-family: 'Roboto Condensed', sans-serif;
-    font-size: 10px;
+    font-size: 12px;
     color: rgb(99, 99, 99);
 }
 
 .form-item {
     font-family: 'Roboto Condensed', sans-serif;
-    font-size: 12px;
+    font-size: 14px;
 }
 
 .form-error-label {

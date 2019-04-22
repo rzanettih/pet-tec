@@ -15,6 +15,7 @@ import { ProductsComponent } from './products/products.component';
 import { ProductListItemComponent } from './products/product-list-item/product-list-item.component';
 
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { InventoryControlComponent } from './products/inventory-control/inventory-control.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     MenuComponent,
     HomeComponent,
     ProductsComponent,
-    ProductListItemComponent
+    ProductListItemComponent,
+    InventoryControlComponent
   ],
   imports: [
     BrowserModule,

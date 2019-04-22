@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Product } from './product.model';
+import { Inventory } from './inventory.model';
+import { DateHelper } from './date-helper.model';
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +10,8 @@ import { Product } from './product.model';
 export class ProductsService {
 
   private _productsDBNode: string = "products";
+  private _inventoryDBNode: string = "inventory";
+
   private _allProducts: Product[];
   public get allProducts() : Product[] {
     return this._allProducts;
@@ -78,6 +82,49 @@ export class ProductsService {
       this.dataBase.doc(this._productsDBNode + '/' + product.id).delete().then(() => {
         this.GetAllProducts();
       });
+  }
+
+  public addInventory(product: Product, inventory: Inventory) {
+    inventory.date = inventory.date && inventory.date != "" ? new Date(inventory.date).toLocaleDateString("pt-BR") : null;
+    inventory.dateAdded = DateHelper.currentDate;
+    inventory.timestamp = DateHelper.currentTimestamp;
+    
+    if(!product.inventoryList) product.inventoryList = new Array();
+    product.inventoryList.push(inventory);
+
+    if(product.id) {
+      this.saveInventory(product.id, inventory);
+    }
+
+    console.log([product, inventory]);
+
+  }
+
+  public saveInventory(productId: string, inventory: Inventory) {
+    if(productId && productId != "" && inventory) {
+      delete inventory.id;
+      // Add the productID to the property in the dataBase but not interesting for the object here
+      inventory["productID"] = productId;
+      this.dataBase.collection(this._inventoryDBNode).add(inventory).then(ref => {
+        inventory.id = ref.id;
+      });
+      delete inventory["productID"];
+    }
+  }
+
+  public getInventory(product: Product) {
+    if(product && product.id) {
+      // orderBy('timestamp', 'desc')
+      this.dataBase.collection(this._inventoryDBNode, ref => ref.where("productID", "==", product.id).orderBy('timestamp', 'desc')).snapshotChanges().subscribe(dbReturnArray => {
+        product.inventoryList = dbReturnArray.map(item => {
+          return {
+            id: item.payload.doc.id,
+            ...item.payload.doc.data()
+          } as Inventory; 
+        });
+      });
+    }
+    
   }
 
   
