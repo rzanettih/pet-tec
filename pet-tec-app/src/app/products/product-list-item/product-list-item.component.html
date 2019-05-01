@@ -7,6 +7,29 @@
   <div class="type form-item"><span [class]="productItem.type == 'S' ? 'alert-warning': 'alert-primary'">{{productItem.type == "S" ? "SERVIÇO": "PRODUTO"}}</span></div>
   <label class="productName-label form-item-label">Nome</label>
   <div class="productName form-item">{{productItem.productName}}</div>
-  <div class="actions"><button class="btn btn-info" (click)="onEdit()">Editar</button>&nbsp;<button class="btn btn-danger" (click)="onDelete()">Excluir</button></div>
-  <div class="inventory"><app-inventory-control [productItem]="productItem"></app-inventory-control></div>
+  <!-- <div class="actions"><button class="btn btn-info" (click)="onEdit()">Editar</button>&nbsp;<button class="btn btn-danger" (click)="onDelete()">Excluir</button></div> -->
+  <div class="actions">
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="onEdit()">
+        <mat-icon>build</mat-icon>
+        <span>Editar</span>
+      </button>
+      <button mat-menu-item (click)="onDelete()">
+        <mat-icon>delete_forever</mat-icon>
+        <span>Excluir</span>
+      </button>
+      <button mat-menu-item *ngIf="productItem.type != 'S'">
+        <mat-icon>assignment_returned</mat-icon>
+        <span>+ Estoque</span>
+      </button>
+      <button mat-menu-item *ngIf="productItem.type != 'S'">
+        <mat-icon>assignment</mat-icon>
+        <span>Ver entradas em estoque</span>
+      </button>
+    </mat-menu>
+  </div>
+  <div class="inventory"><app-inventory-control [productItem]="productItem" showButtons="false"></app-inventory-control></div>
 </div>

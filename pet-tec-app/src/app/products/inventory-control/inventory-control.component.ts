@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { Product } from 'src/app/shared/product.model';
 import { NgForm } from '@angular/forms';
 import { Inventory } from 'src/app/shared/inventory.model';
@@ -23,6 +23,17 @@ export class InventoryControlComponent implements OnInit {
     return this._productItem ? this._productItem : new Product();
   }
 
+  private _showButtons: boolean;
+  @Input()
+  set showButtons(showButtons: boolean) {
+    this._showButtons = showButtons;
+    console.log(`Got "${showButtons}" as input to the property of the type ${typeof showButtons}`);
+    this.showHideButtonsController();
+  }
+  get showButtons() : boolean {
+    return this._showButtons ? this._showButtons : true;
+  }
+
   private inventoryInContext: Inventory;
   private acionAdd: boolean;
   private showList: boolean;
@@ -30,6 +41,7 @@ export class InventoryControlComponent implements OnInit {
   ngOnInit() {
     this.resetForm();
     this.showList = false;
+    // this.showHideButtonsController();
   }
 
   resetForm(form?: NgForm) {
@@ -54,6 +66,14 @@ export class InventoryControlComponent implements OnInit {
   formAddInventorySubmit(form: NgForm) {
     this.productService.addInventory(this._productItem, Object.assign({}, this.inventoryInContext));
     this.resetForm();
+  }
+
+  @ViewChild('btnAddInventory') divButtons: ElementRef;
+
+  showHideButtonsController(){
+    this.divButtons.nativeElement.style.display = this.showButtons ? 'block' : 'none';;
+    console.log(`innerProperty: ${this._showButtons}, property: ${this.showButtons}, htmlElement: ${this.divButtons.nativeElement.style.display}`);
+
   }
 
 }

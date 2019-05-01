@@ -1,24 +1,22 @@
 .product-container {
     width: 100%;
     display: grid;
-    grid-template-columns: auto;
-    grid-template-rows: auto auto 10px auto auto 10px auto auto 10px auto auto 10px auto 10px auto;
+    grid-template-columns: auto 10%;
+    grid-template-rows: auto auto 10px auto auto 10px auto auto 10px auto auto 10px auto;
     grid-template-areas: 
-        "productName-label"
-        "productName"
-        "."
-        "id-label"
-        "id"
-        "."
-        "date-label"
-        "dateAdded"
-        "."
-        "type-label"
-        "type"
-        "."
-        "actions"
-        "."
-        "inventory";
+        "productName-label actions"
+        "productName actions"
+        ". ."
+        "id-label id-label"
+        "id id"
+        ". ."
+        "date-label date-label"
+        "dateAdded dateAdded"
+        ". ."
+        "type-label type-label"
+        "type type"
+        ". ."
+        "inventory inventory";
 }
 
 .id-label {
@@ -58,9 +56,6 @@
 .actions {
     grid-area: actions;
     text-align: right;
-    border-top: solid 1px rgba(163, 180, 196, 0.336);
-    margin-top: 10px;
-    padding-top: 10px;
 }
 
 .inventory {
@@ -71,15 +66,13 @@
 
     .product-container {
         grid-template-columns: auto 10px auto 10px 10%;
-        grid-template-rows: auto auto 10px auto auto 10px auto 10px auto;
+        grid-template-rows: auto auto 10px auto auto 10px auto;
         grid-template-areas: 
-            "productName-label productName-label productName-label productName-label productName-label"
-            "productName productName productName productName productName"
+            "productName-label productName-label productName-label productName-label actions"
+            "productName productName productName productName actions"
             ". . . . ."
             "id-label . date-label . type-label"
             "id . dateAdded . type"
-            ". . . . ."
-            "actions actions actions actions actions"
             ". . . . ."
             "inventory inventory inventory inventory inventory";
     }
