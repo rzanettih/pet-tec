@@ -1,5 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { Product } from 'src/app/shared/product.model';
+import { InventoryControlComponent } from '../inventory-control/inventory-control.component';
 
 @Component({
   selector: 'app-product-list-item',
@@ -23,12 +24,22 @@ export class ProductListItemComponent implements OnInit {
 
   @Output() edit: EventEmitter<Product> = new EventEmitter();
 
+  @ViewChild('itemInventory') itemInventory: InventoryControlComponent;
+
   onDelete() {
     this.delete.emit(this.productItem);
   }
 
   onEdit() {
     this.edit.emit(this.productItem);
+  }
+
+  addInventory() {
+    this.itemInventory.addInventory();
+  }
+
+  listInventory() {
+    this.itemInventory.showInventoryList();
   }
 
   ngOnInit() {

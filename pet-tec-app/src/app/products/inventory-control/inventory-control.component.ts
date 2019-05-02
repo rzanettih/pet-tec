@@ -23,16 +23,9 @@ export class InventoryControlComponent implements OnInit {
     return this._productItem ? this._productItem : new Product();
   }
 
-  private _showButtons: boolean;
+  // string = 1 for showing and anything else for not showing
   @Input()
-  set showButtons(showButtons: boolean) {
-    this._showButtons = showButtons;
-    console.log(`Got "${showButtons}" as input to the property of the type ${typeof showButtons}`);
-    this.showHideButtonsController();
-  }
-  get showButtons() : boolean {
-    return this._showButtons ? this._showButtons : true;
-  }
+  public showButtons: string;
 
   private inventoryInContext: Inventory;
   private acionAdd: boolean;
@@ -41,7 +34,6 @@ export class InventoryControlComponent implements OnInit {
   ngOnInit() {
     this.resetForm();
     this.showList = false;
-    // this.showHideButtonsController();
   }
 
   resetForm(form?: NgForm) {
@@ -68,12 +60,12 @@ export class InventoryControlComponent implements OnInit {
     this.resetForm();
   }
 
-  @ViewChild('btnAddInventory') divButtons: ElementRef;
+  addInventory(){
+    console.log("call addInventory()");
+  }
 
-  showHideButtonsController(){
-    this.divButtons.nativeElement.style.display = this.showButtons ? 'block' : 'none';;
-    console.log(`innerProperty: ${this._showButtons}, property: ${this.showButtons}, htmlElement: ${this.divButtons.nativeElement.style.display}`);
-
+  showInventoryList(){
+    console.log("call listInventory()");
   }
 
 }

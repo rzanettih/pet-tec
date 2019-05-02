@@ -1,22 +1,19 @@
 .product-container {
     width: 100%;
     display: grid;
-    grid-template-columns: auto 10%;
-    grid-template-rows: auto auto 10px auto auto 10px auto auto 10px auto auto 10px auto;
+    grid-template-columns: 48px 10px auto 10%;
+    grid-template-rows: auto auto 10px auto auto 10px auto auto 10px auto;
     grid-template-areas: 
-        "productName-label actions"
-        "productName actions"
-        ". ."
-        "id-label id-label"
-        "id id"
-        ". ."
-        "date-label date-label"
-        "dateAdded dateAdded"
-        ". ."
-        "type-label type-label"
-        "type type"
-        ". ."
-        "inventory inventory";
+        "type . productName actions"
+        "type . productName actions"
+        ". . . ."
+        "id-label id-label id-label id-label"
+        "id id id id"
+        ". . . ."
+        "date-label date-label date-label date-label"
+        "dateAdded dateAdded dateAdded dateAdded"
+        ". . . ."
+        "inventory inventory inventory inventory";
 }
 
 .id-label {
@@ -35,16 +32,8 @@
     grid-area: dateAdded;
 }
 
-.type-label {
-    grid-area: type-label;
-}
-
 .type {
     grid-area: type;
-}
-
-.productName-label {
-    grid-area: productName-label;
 }
 
 .productName {
@@ -65,16 +54,16 @@
 @media screen and (min-width: 600px) {
 
     .product-container {
-        grid-template-columns: auto 10px auto 10px 10%;
+        grid-template-columns: 48px 10px auto 10px auto 10px 10%;
         grid-template-rows: auto auto 10px auto auto 10px auto;
         grid-template-areas: 
-            "productName-label productName-label productName-label productName-label actions"
-            "productName productName productName productName actions"
-            ". . . . ."
-            "id-label . date-label . type-label"
-            "id . dateAdded . type"
-            ". . . . ."
-            "inventory inventory inventory inventory inventory";
+            "type . productName productName productName productName actions"
+            "type . productName productName productName productName actions"
+            ". . . . . . ."
+            "id-label . date-label . . . ."
+            "id . dateAdded . . . ."
+            ". . . . . . ."
+            "inventory inventory inventory inventory inventory inventory inventory";
     }
 
 }

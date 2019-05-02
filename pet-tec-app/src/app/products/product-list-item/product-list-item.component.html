@@ -1,11 +1,12 @@
 <div class="product-container">
+  <div class="type form-item">
+    <img [src]="productItem.type == 'S' ? 'assets/img/ProductBadge.png' : 'assets/img/ServiceBadge.png'" [alt]="productItem.type == 'S' ? 'SERVIÇO' : 'PRODUTO'" data-toggle="tooltip" [title]="productItem.type == 'S' ? 'SERVIÇO' : 'PRODUTO'" />
+    <!-- <span [class]="productItem.type == 'S' ? 'alert-warning': 'alert-primary'">{{productItem.type == "S" ? "SERVIÇO": "PRODUTO"}}</span> -->
+  </div>
   <label class="id-label form-item-label">Código</label>
   <div class="id form-item">{{productItem.id}}</div>
   <label class="date-label form-item-label">Data Adicionado</label>
   <div class="dateAdded form-item">{{productItem.dateAdded}}</div>
-  <label class="type-label form-item-label">Tipo</label>
-  <div class="type form-item"><span [class]="productItem.type == 'S' ? 'alert-warning': 'alert-primary'">{{productItem.type == "S" ? "SERVIÇO": "PRODUTO"}}</span></div>
-  <label class="productName-label form-item-label">Nome</label>
   <div class="productName form-item">{{productItem.productName}}</div>
   <!-- <div class="actions"><button class="btn btn-info" (click)="onEdit()">Editar</button>&nbsp;<button class="btn btn-danger" (click)="onDelete()">Excluir</button></div> -->
   <div class="actions">
@@ -21,15 +22,15 @@
         <mat-icon>delete_forever</mat-icon>
         <span>Excluir</span>
       </button>
-      <button mat-menu-item *ngIf="productItem.type != 'S'">
-        <mat-icon>assignment_returned</mat-icon>
+      <button mat-menu-item *ngIf="productItem.type != 'S'" (click)="addInventory()">
+        <mat-icon>assignment_returned</mat-icon> 
         <span>+ Estoque</span>
       </button>
-      <button mat-menu-item *ngIf="productItem.type != 'S'">
+      <button mat-menu-item *ngIf="productItem.type != 'S'" (click)="listInventory()">
         <mat-icon>assignment</mat-icon>
         <span>Ver entradas em estoque</span>
       </button>
     </mat-menu>
   </div>
-  <div class="inventory"><app-inventory-control [productItem]="productItem" showButtons="false"></app-inventory-control></div>
+  <div class="inventory"><app-inventory-control #itemInventory [productItem]="productItem" showButtons="0"></app-inventory-control></div>
 </div>

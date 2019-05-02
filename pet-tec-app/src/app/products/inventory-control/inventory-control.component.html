@@ -1,7 +1,7 @@
 <div class="container">
-  <div class="row" #btnAddInventory id="btnAddInventory" class="btn-container">
-    <button type="button" class="btn-add-inventory" (click)="actionAdd=true" *ngIf="!actionAdd && showButtons">+ estoque</button>
-    <button type="button" class="btn-toggle-inventory-list" (click)="showList=!showList" *ngIf="productItem.inventoryList && productItem.inventoryList.length > 0 && showButtons">lista de entradas em estoque</button>
+  <div class="row" id="btnAddInventory" class="btn-container" *ngIf="showButtons == '1'">
+    <button type="button" class="btn-add-inventory" (click)="actionAdd=true" *ngIf="!actionAdd">+ estoque</button>
+    <button type="button" class="btn-toggle-inventory-list" (click)="showList=!showList" *ngIf="productItem.inventoryList && productItem.inventoryList.length > 0">lista de entradas em estoque</button>
   </div>
   <div class="row" id="formAddInventory" *ngIf="actionAdd">
     <form class="add-inventory-container" #formAddInventory="ngForm" autocomplete="off" (submit)="formAddInventorySubmit(formAddInventory)">
