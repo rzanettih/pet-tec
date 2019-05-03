@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { Product } from 'src/app/shared/product.model';
 import { InventoryControlComponent } from '../inventory-control/inventory-control.component';
+import { ProductFormComponent } from '../product-form/product-form.component';
 
 @Component({
   selector: 'app-product-list-item',
@@ -43,6 +44,7 @@ export class ProductListItemComponent implements OnInit {
   }
 
   ngOnInit() {
+    
   }
 
 }

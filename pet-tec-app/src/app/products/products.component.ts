@@ -1,10 +1,11 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { NgForm } from '@angular/forms';
 import { ProductsService } from '../shared/products.service';
 import { ToastrService } from 'ngx-toastr';
 import { DateHelper } from '../shared/date-helper.model';
 import { Product } from '../shared/product.model';
+import { ProductFormComponent } from './product-form/product-form.component';
 
 
 @Component({
@@ -15,6 +16,9 @@ import { Product } from '../shared/product.model';
 export class ProductsComponent implements OnInit {
 
   private isUpdate: boolean = false;
+
+  @ViewChild('productForm') productForm: ProductFormComponent;
+
   constructor(private productService: ProductsService, private msg: ToastrService, private modalService: BsModalService) { }
 
   ngOnInit() {

@@ -1,4 +1,8 @@
 <div class="container">
+  <mat-tab-group>
+    <mat-tab label="PRODUTO"><app-product-form #productForm></app-product-form></mat-tab>
+    <mat-tab label="SERVIÇO"><app-service-form></app-service-form></mat-tab>
+  </mat-tab-group>
   <h3>Produtos</h3>
   <form #form="ngForm" autocomplete="off" (submit)="formSubmit(form)">
       <div class="form-group">

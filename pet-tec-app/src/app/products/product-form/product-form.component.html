@@ -1,0 +1,33 @@
+<form class="product-form-container" [formGroup]="productForm" (ngSubmit)="onSubmit()">
+  <mat-form-field class="product-form-codigo">
+    <input matInput placeholder="Codigo" #id formControlName="id" autocomplete="off" required (keyup)="onIdChange($event)">
+    <mat-error *ngIf="!id.valid">
+      O codigo e <strong>obrigatorio</strong>
+    </mat-error>
+    <mat-error *ngIf="id.hasError">
+      Este codigo ja esta cadastrado {{id.errors}}
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field class="product-form-name">
+    <input matInput placeholder="Nome" #name formControlName="name" required>
+    <mat-error *ngIf="!name.valid">
+      O nome e <strong>obrigatorio</strong>
+    </mat-error>
+  </mat-form-field>
+  <div class="product-form-first-inventory">
+    <mat-form-field class="product-form-qt-inventory">
+      <input type="number" matInput placeholder="Em estoque" #qtInventory formControlName="qtInventory">
+    </mat-form-field>
+    <mat-form-field class="product-form-cost">
+        <span matPrefix>R$&nbsp;</span>
+      <input type="number" matInput placeholder="Custo" #cost formControlName="cost">
+    </mat-form-field>
+    <mat-form-field class="product-form-price">
+      <span matPrefix>R$&nbsp;</span>
+      <input type="number" matInput placeholder="Venda" #price formControlName="price">
+    </mat-form-field>
+  </div>
+  <div class="product-form-button">
+    <button mat-raised-button color="primary" type="submit" [disabled]="!productForm.valid">Salvar</button>
+  </div>
+</form>

@@ -3,6 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Product } from './product.model';
 import { Inventory } from './inventory.model';
 import { DateHelper } from './date-helper.model';
+import { async } from 'q';
 
 @Injectable({
   providedIn: 'root'
@@ -29,12 +30,14 @@ export class ProductsService {
   public GetAllProducts() : Promise<Product[]> {
 
     return new Promise(resolve => {
+
       this.dataBase.collection(this._productsDBNode, ref => ref.orderBy('productName', 'asc')).snapshotChanges().subscribe(dbReturnArray => {
+        console.warn('Accessed DB to get all products');
         this._filteredProducts = this._allProducts = dbReturnArray.map(item => {
           return {
             id: item.payload.doc.id,
             ...item.payload.doc.data()
-          } as Product; 
+          } as Product;
         });
       });
 

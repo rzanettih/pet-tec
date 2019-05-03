@@ -7,7 +7,7 @@ import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ToastrModule } from "ngx-toastr";
 
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MenuComponent } from './menu/menu.component';
@@ -52,6 +52,8 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 
 // Cookie
 import { CookieService } from 'ngx-cookie-service';
+import { ProductFormComponent } from './products/product-form/product-form.component';
+import { ServiceFormComponent } from './products/service-form/service-form.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +62,9 @@ import { CookieService } from 'ngx-cookie-service';
     HomeComponent,
     ProductsComponent,
     ProductListItemComponent,
-    InventoryControlComponent
+    InventoryControlComponent,
+    ProductFormComponent,
+    ServiceFormComponent
   ],
   imports: [
     BrowserModule,
@@ -68,6 +72,7 @@ import { CookieService } from 'ngx-cookie-service';
     AngularFireModule.initializeApp(environment.connConfig),
     AngularFirestoreModule,
     FormsModule,
+    ReactiveFormsModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
     ModalModule.forRoot(),
