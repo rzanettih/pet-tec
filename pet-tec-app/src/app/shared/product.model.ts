@@ -5,7 +5,9 @@ export class Product {
     productName: string;
     type: string;
     isActive: boolean;
-    dateAdded: string;
-    timestamp: number;
+    dateAdded?: string;
+    timestamp?: number;
+    price?: number;
+    qtty?: number;
     inventoryList?: Inventory[]
 }

@@ -1,6 +1,6 @@
 <div class="product-container">
   <div class="type form-item">
-    <img [src]="productItem.type == 'S' ? 'assets/img/ProductBadge.png' : 'assets/img/ServiceBadge.png'" [alt]="productItem.type == 'S' ? 'SERVIÇO' : 'PRODUTO'" data-toggle="tooltip" [title]="productItem.type == 'S' ? 'SERVIÇO' : 'PRODUTO'" />
+    <img [src]="productItem.type == 'P' ? 'assets/img/ProductBadge.png' : 'assets/img/ServiceBadge.png'" [alt]="productItem.type == 'S' ? 'SERVIÇO' : 'PRODUTO'" data-toggle="tooltip" [title]="productItem.type == 'S' ? 'SERVIÇO' : 'PRODUTO'" />
     <!-- <span [class]="productItem.type == 'S' ? 'alert-warning': 'alert-primary'">{{productItem.type == "S" ? "SERVIÇO": "PRODUTO"}}</span> -->
   </div>
   <label class="id-label form-item-label">Código</label>

@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, ElementRef, Directive } from '@angular/core';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { NgForm } from '@angular/forms';
 import { ProductsService } from '../shared/products.service';
@@ -17,13 +17,11 @@ export class ProductsComponent implements OnInit {
 
   private isUpdate: boolean = false;
 
-  @ViewChild('productForm') productForm: ProductFormComponent;
-
   constructor(private productService: ProductsService, private msg: ToastrService, private modalService: BsModalService) { }
 
   ngOnInit() {
     this.resetForm();
-    this.productService.GetAllProducts().then(allItems => {
+    this.productService.GetAllProducts().then(_ => {
       this.productService.filterListByText("");
     });
   }
@@ -64,7 +62,7 @@ export class ProductsComponent implements OnInit {
 
     this.productService.SaveItemInContext();
     this.msg.success("Produto salvo");
-  }
+  } 
 
   onFilter(event: any) {
     if(event && event.target) {
@@ -72,48 +70,72 @@ export class ProductsComponent implements OnInit {
     }
   }
 
-  validateIdBeingEntered(event?: any) {
-    if(event && event.target) {
-      document.getElementById("existing-code-label").style.display = this.productService.isIdExisting(event.target.value) && !this.isUpdate ? 'block' : 'none';
-    } else {
-      document.getElementById("existing-code-label").style.display = 'none';
-    }
+  //#region Remove when both Products and Services are Done
+  // TODO: Remove when both Products and Services are Done
+  // validateIdBeingEntered(event?: any) {
+  //   if(event && event.target) {
+  //     document.getElementById("existing-code-label").style.display = this.productService.isIdExisting(event.target.value) && !this.isUpdate ? 'block' : 'none';
+  //   } else {
+  //     document.getElementById("existing-code-label").style.display = 'none';
+  //   }
+  // }
+  //#endregion
+  // @ViewChild(ProductFormComponent) _productFormEdit: ProductFormComponent;
+  onEditProduct(product: Product, template: TemplateRef<any>, productFormEdit: any) {
+    //#region Remove when both Products and Services are Done
+    // TODO: Remove when both Products and Services are Done
+    // this.validateIdBeingEntered();
+    // this.productService.productInContext = Object.assign({}, product);
+    // this.isUpdate = true;
+    // document.body.scrollTop = 0;
+    // document.documentElement.scrollTop = 0;
+    //#endregion
+    this.modalRef = this.modalService.show(template, {class: 'modal-lg', keyboard: true});
+    console.log('Hora de editar. O formulario e o produto sao: ');
+    console.log([productFormEdit, product]);
+
+    // this._productFormEdit.ProductForUpdate = product;
   }
 
-  onEditProduct(product: Product) {
-    this.validateIdBeingEntered();
-    this.productService.productInContext = Object.assign({}, product);
-    this.isUpdate = true;
-    document.body.scrollTop = 0;
-    document.documentElement.scrollTop = 0;
-  }
+  
 
-  cancelEdit() {
-    this.resetForm();
+  editCancel() {
+    this.modalRef.hide();
   }
 
   private productToDelete: Product;
+  
+  // somente um pop-up vai abrir por vez
+  private modalRef: BsModalRef;
 
   onDeleteProduct(product: Product, modal: TemplateRef<any>) {
     this.productToDelete = product;
     this.openModal(modal);
   }
-
-  private modalRef: BsModalRef;
+  
 
   openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template, {class: 'modal-sm', keyboard: true});
   }
  
-  confirmDel(): void {
+  confirmDel() {
     this.productService.DeleteItem(this.productToDelete);
     this.msg.success("Produto excluído");
     this.cancelDel();
   }
  
-  cancelDel(): void {
+  cancelDel() {
     this.modalRef.hide();
     this.productToDelete = null;
+  }
+
+
+  onProductAdded(product: Product) {
+    this.msg.success("Produto salvo com sucesso");
+  }
+
+  onProductUpdated(product: Product) {
+    this.onProductAdded(product);
   }
 
 }

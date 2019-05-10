@@ -1,17 +1,15 @@
-<form class="product-form-container" [formGroup]="productForm" (ngSubmit)="onSubmit()">
+<form class="product-form-container" [formGroup]="productForm" (ngSubmit)="onSubmit()" #formProduct="ngForm">
   <mat-form-field class="product-form-codigo">
-    <input matInput placeholder="Codigo" #id formControlName="id" autocomplete="off" required (keyup)="onIdChange($event)">
-    <mat-error *ngIf="!id.valid">
-      O codigo e <strong>obrigatorio</strong>
-    </mat-error>
-    <mat-error *ngIf="id.hasError">
-      Este codigo ja esta cadastrado {{id.errors}}
+    <input matInput placeholder="Codigo" #id formControlName="id" autocomplete="off" required>
+    <mat-error *ngIf="!id.valid && productForm.touched">
+      <span *ngIf="productForm.controls.id.getError('required')">O código do produto é <strong>obrigatorio</strong></span>
+      <span *ngIf="productForm.controls.id.getError('duplicated')">O código informado <strong>já existe</strong></span>
     </mat-error>
   </mat-form-field>
   <mat-form-field class="product-form-name">
     <input matInput placeholder="Nome" #name formControlName="name" required>
-    <mat-error *ngIf="!name.valid">
-      O nome e <strong>obrigatorio</strong>
+    <mat-error *ngIf="!name.valid && productForm.touched">
+      O nome do produto é <strong>obrigatório</strong>
     </mat-error>
   </mat-form-field>
   <div class="product-form-first-inventory">
@@ -22,7 +20,7 @@
         <span matPrefix>R$&nbsp;</span>
       <input type="number" matInput placeholder="Custo" #cost formControlName="cost">
     </mat-form-field>
-    <mat-form-field class="product-form-price">
+    <mat-form-field class="product-form-price" #costMatFormField [hintLabel]="cost.value != '' && price.value != '' ? showProfit(cost.value, price.value) : 'Informe custo e preço para calculo de lucro'">
       <span matPrefix>R$&nbsp;</span>
       <input type="number" matInput placeholder="Venda" #price formControlName="price">
     </mat-form-field>

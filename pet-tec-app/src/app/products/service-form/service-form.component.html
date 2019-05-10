@@ -1,3 +1,25 @@
-<p>
-  service-form works!
-</p>
+<form #formService="ngForm" autocomplete="off" class="service-form-container" (ngSubmit)="onSubmit(formService)">
+  <input name="id" #id="ngModel" [(ngModel)]="serviceInContext.id" hidden>
+  <mat-form-field class="service-form-name">
+    <input matInput placeholder="Nome" name="name" #name="ngModel" [(ngModel)]="serviceInContext.productName" required>
+    <mat-error *ngIf="!name.valid">
+      O nome do servico é <strong>obrigatório</strong>
+    </mat-error>
+  </mat-form-field>
+  <div class="service-form-costs">
+    <mat-form-field class="service-form-cost">
+        <span matPrefix>R$&nbsp;</span>
+      <input type="number" matInput placeholder="Custo" name="cost" #cost="ngModel" [(ngModel)]="serviceInContext.cost">
+    </mat-form-field>
+    <mat-form-field class="service-form-price" #costMatFormField [hintLabel]="showProfit(cost.value, price.value)">
+      <span matPrefix>R$&nbsp;</span>
+      <input type="number" matInput placeholder="Venda" name="price" #price="ngModel" [(ngModel)]="serviceInContext.price" required>
+      <mat-error *ngIf="!price.valid">
+        O preco do servico é <strong>obrigatório</strong>
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div class="service-form-button">
+    <button mat-raised-button color="primary" type="submit" [disabled]="!formService.valid">Salvar</button>
+  </div>
+</form>

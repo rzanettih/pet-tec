@@ -4,15 +4,19 @@ import { Product } from './product.model';
 import { Inventory } from './inventory.model';
 import { DateHelper } from './date-helper.model';
 import { async } from 'q';
+import { resolve } from 'url';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductsService {
 
+  //#region DB Tables/Nodes
   private _productsDBNode: string = "products";
   private _inventoryDBNode: string = "inventory";
+  //#endregion
 
+  //#region Public properties
   private _allProducts: Product[];
   public get allProducts() : Product[] {
     return this._allProducts;
@@ -24,6 +28,7 @@ export class ProductsService {
   }
 
   public productInContext: Product;
+  //#endregion
 
   constructor(private dataBase: AngularFirestore) { }
 
@@ -80,13 +85,57 @@ export class ProductsService {
     this.dataBase.collection(this._productsDBNode).doc(id).set(this.productInContext);
   }
 
-  public DeleteItem(product: Product) {
-    if(product)
-      this.dataBase.doc(this._productsDBNode + '/' + product.id).delete().then(() => {
-        this.GetAllProducts();
-      });
+  public SaveProduct(product: Product, afterSaveCallBack?) {
+    let id = product.id && product.id != "" ? product.id : this.dataBase.createId();
+    delete product.id;
+
+    let inventoryList: Inventory[] = product.inventoryList;
+    delete product.inventoryList;
+
+    if(!product.price) delete product.price;
+    if(!product.qtty) delete product.qtty;
+
+    this.dataBase.collection(this._productsDBNode).doc(id).set(product).then(_ => {
+      product["id"] = id;
+      console.warn("Accessed DB to save a product");
+
+      if(inventoryList && inventoryList.length == 1 && this.isInventoryGoodToBeSaved(inventoryList[0])){
+        this.saveInventory(product.id, inventoryList[0], savedInventory => {
+          inventoryList[0].id = savedInventory.id;
+          product["inventoryList"] = inventoryList;
+          if(afterSaveCallBack) afterSaveCallBack(product);
+        });
+      } else {
+        if(afterSaveCallBack) afterSaveCallBack(product);
+      }
+
+    });
   }
 
+  public DeleteItem(product: Product) {
+    if(product) {
+      this._deleteAllInventoryOfAProduct(product.id).then(_ => {
+        this.dataBase.doc(this._productsDBNode + '/' + product.id).delete().then(() => {
+          this.GetAllProducts();
+        });
+      });
+      
+    }
+  }
+
+  private async _deleteAllInventoryOfAProduct(productID: string) {
+    this.dataBase.collection(this._inventoryDBNode, ref => ref.where("productID", "==", productID)).get().forEach(value => {
+      value.forEach(doc => {
+        doc.ref.delete();
+      });
+    }).then(result => {
+      return result;
+    })
+  }
+
+ /**
+ * @obsolete addInventory is obsolete
+ */
   public addInventory(product: Product, inventory: Inventory) {
     inventory.date = inventory.date && inventory.date != "" ? new Date(inventory.date).toLocaleDateString("pt-BR") : null;
     inventory.dateAdded = DateHelper.currentDate;
@@ -103,21 +152,33 @@ export class ProductsService {
 
   }
 
-  public saveInventory(productId: string, inventory: Inventory) {
-    if(productId && productId != "" && inventory) {
+  public isInventoryGoodToBeSaved(inventory: Inventory) { 
+    return (inventory && (inventory.qtty || inventory.cost || inventory.price));
+  }
+  
+  public saveInventory(productId: string, inventory: Inventory, afterSaveCallBack?) {
+    // basic information for the inventory is either qtty or cost or price
+    if(productId && productId != "" && this.isInventoryGoodToBeSaved(inventory)) {
+      
+      // remove the property from the object so it generates automatically in the DB
       delete inventory.id;
-      // Add the productID to the property in the dataBase but not interesting for the object here
+      
+      // Add the productID to the property in the dataBase but not interesting for the object in the code base model
       inventory["productID"] = productId;
+
       this.dataBase.collection(this._inventoryDBNode).add(inventory).then(ref => {
+        console.warn(`Accessed DB to save an inventory of the ID "${ref.id}"`);
         inventory.id = ref.id;
+        if(afterSaveCallBack) afterSaveCallBack(inventory);
       });
+
       delete inventory["productID"];
+
     }
   }
 
   public getInventory(product: Product) {
     if(product && product.id) {
-      // orderBy('timestamp', 'desc')
       this.dataBase.collection(this._inventoryDBNode, ref => ref.where("productID", "==", product.id).orderBy('timestamp', 'desc')).snapshotChanges().subscribe(dbReturnArray => {
         product.inventoryList = dbReturnArray.map(item => {
           return {
