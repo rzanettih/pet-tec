@@ -1,4 +1,4 @@
-<form #formService="ngForm" autocomplete="off" class="service-form-container" (ngSubmit)="onSubmit(formService)">
+<form #formService="ngForm" autocomplete="off" class="service-form-container" (ngSubmit)="SaveService()">
   <input name="id" #id="ngModel" [(ngModel)]="serviceInContext.id" hidden>
   <mat-form-field class="service-form-name">
     <input matInput placeholder="Nome" name="name" #name="ngModel" [(ngModel)]="serviceInContext.productName" required>
@@ -19,7 +19,7 @@
       </mat-error>
     </mat-form-field>
   </div>
-  <div class="service-form-button">
+  <div class="service-form-button" *ngIf="!_isUpdate">
     <button mat-raised-button color="primary" type="submit" [disabled]="!formService.valid">Salvar</button>
   </div>
 </form>

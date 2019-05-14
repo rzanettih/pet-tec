@@ -8,6 +8,8 @@ export class Product {
     dateAdded?: string;
     timestamp?: number;
     price?: number;
+    cost?: number;
     qtty?: number;
+    profit?: number;
     inventoryList?: Inventory[]
 }

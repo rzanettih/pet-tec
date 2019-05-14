@@ -27,7 +27,7 @@ export class ProductsService {
     return this._filteredProducts;
   }
 
-  public productInContext: Product;
+  // public productInContext: Product;
   //#endregion
 
   constructor(private dataBase: AngularFirestore) { }
@@ -79,19 +79,32 @@ export class ProductsService {
     return this._allProducts.findIndex(x => x.id.toLocaleLowerCase() === id.toLocaleLowerCase()) >= 0;
   }
 
-  public SaveItemInContext() {
-    let id = this.productInContext.id;
-    delete this.productInContext.id;
-    this.dataBase.collection(this._productsDBNode).doc(id).set(this.productInContext);
-  }
+  //#region Delete this once product in context is removed from here
+  // public SaveItemInContext() {
+  //   let id = this.productInContext.id;
+  //   delete this.productInContext.id;
+  //   this.dataBase.collection(this._productsDBNode).doc(id).set(this.productInContext);
+  // }
+  //#endregion
 
+  public UpdateProductName(productID: string, productName: string, afterSaveCallBack?) {
+    this.dataBase.doc(`${this._productsDBNode}/${productID}`).update({"productName":productName}).then(_ => {
+      console.warn("Accessed DB to save a product");
+      afterSaveCallBack();
+    });
+  }
+  
   public SaveProduct(product: Product, afterSaveCallBack?) {
     let id = product.id && product.id != "" ? product.id : this.dataBase.createId();
     delete product.id;
 
+    if(!product.dateAdded) product.dateAdded = DateHelper.currentDate;
+    if(!product.timestamp) product.timestamp = DateHelper.currentTimestamp;
+
     let inventoryList: Inventory[] = product.inventoryList;
     delete product.inventoryList;
 
+    if(!product.cost) delete product.cost;
     if(!product.price) delete product.price;
     if(!product.qtty) delete product.qtty;
 

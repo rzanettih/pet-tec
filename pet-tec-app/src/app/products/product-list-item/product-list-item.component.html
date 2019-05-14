@@ -1,17 +1,22 @@
 <div class="product-container">
   <div class="type form-item">
     <img [src]="productItem.type == 'P' ? 'assets/img/ProductBadge.png' : 'assets/img/ServiceBadge.png'" [alt]="productItem.type == 'S' ? 'SERVIÇO' : 'PRODUTO'" data-toggle="tooltip" [title]="productItem.type == 'S' ? 'SERVIÇO' : 'PRODUTO'" />
-    <!-- <span [class]="productItem.type == 'S' ? 'alert-warning': 'alert-primary'">{{productItem.type == "S" ? "SERVIÇO": "PRODUTO"}}</span> -->
   </div>
+  <div class="productName form-item">{{productItem.productName}}</div>
   <label class="id-label form-item-label">Código</label>
   <div class="id form-item">{{productItem.id}}</div>
   <label class="date-label form-item-label">Data Adicionado</label>
   <div class="dateAdded form-item">{{productItem.dateAdded}}</div>
-  <div class="productName form-item">{{productItem.productName}}</div>
-  <!-- <div class="actions"><button class="btn btn-info" (click)="onEdit()">Editar</button>&nbsp;<button class="btn btn-danger" (click)="onDelete()">Excluir</button></div> -->
+  <label class="inventory-label form-item-label">{{productItem.type == "P" ? "Em estoque" : ""}}</label>
+  <div class="inventory form-item">{{productItem.qtty}}</div>
+  <label class="cost-label form-item-label">{{productItem.cost ? 'Custo' : ''}}</label>
+  <div class="cost form-item">{{productItem.cost ? 'R$' + productItem.cost.toFixed(2) : ''}}</div>
+  <label class="sale-label form-item-label">Preço</label>
+  <div class="sale form-item">{{'R$' + productItem.price.toFixed(2)}}</div>
+  <div class="profit">{{showProfit(productItem.cost, productItem.price)}}</div>
   <div class="actions">
     <button mat-icon-button [matMenuTriggerFor]="menu">
-      <mat-icon>more_vert</mat-icon>
+      <mat-icon>more_vert</mat-icon> 
     </button>
     <mat-menu #menu="matMenu">
       <button mat-menu-item (click)="onEdit()">
@@ -32,5 +37,4 @@
       </button>
     </mat-menu>
   </div>
-  <div class="inventory"><app-inventory-control #itemInventory [productItem]="productItem" showButtons="0"></app-inventory-control></div>
 </div>

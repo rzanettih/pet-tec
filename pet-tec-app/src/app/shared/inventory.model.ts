@@ -3,6 +3,7 @@ export class Inventory {
     qtty?: number;
     cost: number;
     price: number;
+    profit?: number;
     date?: string;
     invoice?: string;
     dateAdded?: string;

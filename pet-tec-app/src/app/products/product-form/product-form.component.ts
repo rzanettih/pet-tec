@@ -14,39 +14,38 @@ export class ProductFormComponent implements OnInit {
 
   //#region Inputs, Outputs and Events
 
-  //todo: add product in context
-  //todo: remove the 'save' button in case the product is being updaged in a modal and enable the ability to trigger the 'save' from parent component
+  @Output() ProductFormLoaded: EventEmitter<void> = new EventEmitter();
+  onProductFormLoaded() {
+    this.ProductFormLoaded.emit();
+  }
 
-  
+  @Output() ProductFormClosed: EventEmitter<void> = new EventEmitter();
+  onProductFormClosed() {
+    this.ProductFormClosed.emit();
+  }
+
+  //TODO: Mais facil ter somente um produto nesse contexto
   @Output() ProductAdded: EventEmitter<Product> = new EventEmitter();
-
   onProductAdded(product: Product) {
     this.ProductAdded.emit(product);
   }
 
-  private _productForUpdate: Product;
-  @Input()
-  set ProductForUpdate(product: Product) {
-    this._productForUpdate = product;
-    this.fillFormForEdit();
-  }
-  get ProductForUpdate() : Product {
-    return this._productForUpdate ? this._productForUpdate : null;
-  }
-
   @Output() ProductUpdated: EventEmitter<Product> = new EventEmitter();
-
   onProductUpdated(product: Product) {
     this.ProductUpdated.emit(product);
   }
 
-  
+  private _isUpdate: boolean = false;
+  private _productInContext: Product;
+  get ProductInContext() : Product {
+    return this._productInContext ? this._productInContext : null;
+  }
 
   //#endregion
   
   //#region Form fields & controls
   
-   @ViewChild('formProduct') _formProduct: NgForm;
+  @ViewChild('formProduct') _formProduct: NgForm;
 
   private productForm = new FormGroup({
     id: new FormControl(''),
@@ -87,13 +86,16 @@ export class ProductFormComponent implements OnInit {
     return this.productForm.controls.price.value && !isNaN(this.productForm.controls.price.value) ? this.productForm.controls.price.value : null;
   }
 
+  get formProfit() : number {
+    return this.formCost ? (((this.formPrice - this.formCost)/this.formCost) * 100) : null;
+  }
+
   resetForm() {
     this._removeFormValidators();
     try {
       this._formProduct.resetForm();
     } catch {}
     this.productForm.reset();
-    // this.productForm.markAsUntouched();
     this._addFormValidators();
   }
 
@@ -104,15 +106,20 @@ export class ProductFormComponent implements OnInit {
   ngOnInit() {
     this.resetForm();
     this.productForm.controls.id.valueChanges.subscribe(value => this.onIdChange(value));
+    this.onProductFormLoaded();
   }
 
-  fillFormForEdit(){
-    if(this._productForUpdate && this._productForUpdate.id) {
-      //TODO: Fill form
-      this.productForm.controls.id.setValue(this._productForUpdate.id);
-      console.log(this._productForUpdate.id);
-      console.log("Chegou no componente certo") ;
-      //this.productForm.controls.id = this._productForUpdate.id;
+  ngOnDestroy() {
+    this._isUpdate = false;
+    this._productInContext = null;
+    this.onProductFormClosed();
+  }
+
+  showProductForEditing(product: Product){
+    if(product && product.id) {
+      this._productInContext = product;
+      this._isUpdate = true;
+      this.productForm.controls.name.setValue(this._productInContext.productName);
     }
   }
 
@@ -125,8 +132,10 @@ export class ProductFormComponent implements OnInit {
       timestamp: DateHelper.currentTimestamp,
       dateAdded: DateHelper.currentDate,
       price: this.formPrice,
+      cost: this.formCost,
       qtty: this.formQtty,
-      inventoryList: [this.getInventoryFilled()]
+      profit: this.formProfit,
+      inventoryList: [this.getInventoryFilled()] //fixme: essa linha pode ser que de problema se o produto estiver sendo editado
     }
   }
 
@@ -135,23 +144,34 @@ export class ProductFormComponent implements OnInit {
       qtty: this.formQtty,
       cost: this.formCost,
       price: this.formPrice,
+      profit: this.formProfit,
       dateAdded: DateHelper.currentDate,
       timestamp: DateHelper.currentTimestamp
     };
   }
 
-  onSubmit(){
-    let productSave = this.getProductFilled();
+  public SaveProduct() {
+    if(!this._isUpdate) {
+      this._productInContext = this.getProductFilled();
 
-    this.productservice.SaveProduct(productSave, productSaved => {
-      this.onProductAdded(productSaved);
-      this.resetForm();
-    });
-    
+      this.productservice.SaveProduct(this._productInContext, productSaved => {
+        this.onProductAdded(productSaved);
+        this.resetForm();
+      });
+    } else {
+      this._productInContext.productName = this.formProductName;
+      this.productservice.UpdateProductName(this._productInContext.id, this._productInContext.productName, _ => {
+        this.onProductUpdated(this._productInContext);
+      });
+    }
+  }
+  
+  private onSubmit(){
+    this.SaveProduct();
   }
 
   showProfit(costAmount: number, priceAmount: number) : string {
-    return `Lucro: ${(((priceAmount - costAmount)/costAmount) * 100).toFixed(0)}%`;
+    return `Lucro: ${this.formProfit.toFixed(0)}%`;
   }
 
   onIdChange(value: string) {

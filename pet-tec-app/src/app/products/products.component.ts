@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { DateHelper } from '../shared/date-helper.model';
 import { Product } from '../shared/product.model';
 import { ProductFormComponent } from './product-form/product-form.component';
+import { ServiceFormComponent } from './service-form/service-form.component';
 
 
 @Component({
@@ -15,54 +16,22 @@ import { ProductFormComponent } from './product-form/product-form.component';
 })
 export class ProductsComponent implements OnInit {
 
-  private isUpdate: boolean = false;
+  //#region Fields and Properties
+    
+  // somente um pop-up vai abrir por vez, entao tudo bem ter um objeto geral para todas
+  private modalRef: BsModalRef;
 
-  constructor(private productService: ProductsService, private msg: ToastrService, private modalService: BsModalService) { }
+  //#endregion
+
+  constructor(private productService: ProductsService, private msg: ToastrService, private modalService: BsModalService) { 
+    this._productForEdit = null;
+  }
 
   ngOnInit() {
-    this.resetForm();
     this.productService.GetAllProducts().then(_ => {
       this.productService.filterListByText("");
     });
   }
-
-  resetForm(form?: NgForm) {
-    if(form) form.resetForm();
-    this.productService.productInContext = {
-      id: null,
-      productName: null,
-      type: "P",
-      isActive: null,
-      dateAdded: null,
-      timestamp: null
-    };
-    this.isUpdate = false;
-  }
-
-  formSubmit(form: NgForm) {
-    // let dataForm = form.value;
-    if(!this.isUpdate && document.getElementById("existing-code-label").style.display == "none") {
-      this.saveProduct();
-      this.resetForm(form);
-    }
-
-    if(this.isUpdate) {
-      this.saveProduct();
-      this.resetForm(form);
-    }
-    
-  }
-
-  saveProduct() {
-    this.productService.productInContext.id = this.productService.productInContext.id.toUpperCase().trim();
-    this.productService.productInContext.productName = this.productService.productInContext.productName.toUpperCase().trim();
-    this.productService.productInContext.timestamp = DateHelper.currentTimestamp;
-    this.productService.productInContext.dateAdded = DateHelper.currentDate;
-    this.productService.productInContext.isActive = true;
-
-    this.productService.SaveItemInContext();
-    this.msg.success("Produto salvo");
-  } 
 
   onFilter(event: any) {
     if(event && event.target) {
@@ -70,34 +39,23 @@ export class ProductsComponent implements OnInit {
     }
   }
 
-  //#region Remove when both Products and Services are Done
-  // TODO: Remove when both Products and Services are Done
-  // validateIdBeingEntered(event?: any) {
-  //   if(event && event.target) {
-  //     document.getElementById("existing-code-label").style.display = this.productService.isIdExisting(event.target.value) && !this.isUpdate ? 'block' : 'none';
-  //   } else {
-  //     document.getElementById("existing-code-label").style.display = 'none';
-  //   }
-  // }
-  //#endregion
-  // @ViewChild(ProductFormComponent) _productFormEdit: ProductFormComponent;
-  onEditProduct(product: Product, template: TemplateRef<any>, productFormEdit: any) {
-    //#region Remove when both Products and Services are Done
-    // TODO: Remove when both Products and Services are Done
-    // this.validateIdBeingEntered();
-    // this.productService.productInContext = Object.assign({}, product);
-    // this.isUpdate = true;
-    // document.body.scrollTop = 0;
-    // document.documentElement.scrollTop = 0;
-    //#endregion
-    this.modalRef = this.modalService.show(template, {class: 'modal-lg', keyboard: true});
-    console.log('Hora de editar. O formulario e o produto sao: ');
-    console.log([productFormEdit, product]);
-
-    // this._productFormEdit.ProductForUpdate = product;
+  private _productForEdit: Product;
+  onEditProduct(product: Product, productModal: TemplateRef<any>, serviceModal: TemplateRef<any>) {
+    this._productForEdit = product;
+    this.modalRef = this.modalService.show(product.type == "P" ? productModal : serviceModal, {class: 'modal-lg', keyboard: true});
   }
 
-  
+  onProductFormModalLoaded(productFormComponent: ProductFormComponent) {
+    productFormComponent.showProductForEditing(this._productForEdit);
+  }
+
+  onServiceFormModalLoaded(serviceFormComponent: ServiceFormComponent) {
+    serviceFormComponent.showServiceForEditing(this._productForEdit);
+  }
+
+  onProductFormClosed(){
+    this._productForEdit = null;
+  }
 
   editCancel() {
     this.modalRef.hide();
@@ -105,9 +63,6 @@ export class ProductsComponent implements OnInit {
 
   private productToDelete: Product;
   
-  // somente um pop-up vai abrir por vez
-  private modalRef: BsModalRef;
-
   onDeleteProduct(product: Product, modal: TemplateRef<any>) {
     this.productToDelete = product;
     this.openModal(modal);
@@ -131,11 +86,13 @@ export class ProductsComponent implements OnInit {
 
 
   onProductAdded(product: Product) {
-    this.msg.success("Produto salvo com sucesso");
+    this.msg.success(`${product.type == "S" ? 'Serviço' : 'Produto'} salvo com sucesso`);
   }
 
   onProductUpdated(product: Product) {
+    console.log('Chegou no onProductUpdated do componente pai');
     this.onProductAdded(product);
+    this.modalRef.hide();
   }
 
 }

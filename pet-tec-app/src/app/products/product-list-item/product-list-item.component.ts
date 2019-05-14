@@ -47,4 +47,8 @@ export class ProductListItemComponent implements OnInit {
     
   }
 
+  private showProfit(costAmount: number, priceAmount: number) : string {
+    return costAmount && costAmount > 0 ? `Lucro: ${(((priceAmount - costAmount)/costAmount) * 100).toFixed(0)}%` : '';
+  }
+
 }

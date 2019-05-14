@@ -1,30 +1,8 @@
 <div class="container">
   <mat-tab-group>
     <mat-tab label="PRODUTO"><app-product-form #productForm (ProductAdded)="onProductAdded($event)"></app-product-form></mat-tab>
-    <mat-tab label="SERVIÇO"><app-service-form></app-service-form></mat-tab>
+    <mat-tab label="SERVIÇO"><app-service-form #serviceForm (ServiceAdded)="onProductAdded($event)"></app-service-form></mat-tab>
   </mat-tab-group>
-  <!-- <form #form="ngForm" autocomplete="off" (submit)="formSubmit(form)">
-      <div class="form-group">
-        <input type="text" class="form-control" id="id" name="id" #id="ngModel" [(ngModel)]="productService.productInContext.id" placeholder="Codigo unico do produto" (keyup)="validateIdBeingEntered($event)" required [disabled]="isUpdate">
-        <span class="text-danger form-error-label" #lblValid style="display: none" id="existing-code-label">O código do produto já existe</span>
-      </div>
-      <div class="form-group">
-        <input type="text" class="form-control" name="productName" #productName="ngModel" [(ngModel)]="productService.productInContext.productName" placeholder="Nome do produto" required>
-      </div>
-      <div class="form-group">
-        <select id="type" class="form-control" name="type" #type="ngModel" [(ngModel)]="productService.productInContext.type">
-          <option value="P">PRODUTO</option>
-          <option value="S">SERVIÇO</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <app-inventory-control [productItem]="productService.productInContext"></app-inventory-control>
-      </div>
-      <div class="form-group">
-        <button type="submit" class="btn btn-info" id="btn-submit" [disabled]="!form.valid">Salvar</button>&nbsp;
-        <button type="button" class="btn btn-secondary" id="btn-cancel-edit" (click)="cancelEdit()" *ngIf="isUpdate">Cancelar edição</button>
-      </div>
-  </form> -->
   <div class="row">
     <div class="col-sm-12 col-md-9"><input type="search" class="form-control" placeholder="Filtro..." (keyup)="onFilter($event)" (search)="onFilter($event)"></div>
     <div class="col-sm-12 col-md-3 form-item" style="align-content: center; align-self: center; vertical-align: middle; text-align: right;">Total de produtos [ {{productService.allProducts ? productService.allProducts.length : '-'}} ]</div>
@@ -32,7 +10,7 @@
   <div class="row">
     <div class="col-12">
         <ul class="list-group" *ngFor="let product of productService.filteredProducts">
-            <li class="list-group-item li-list-item" *ngIf="product"><app-product-list-item [productItem]="product" (delete)="onDeleteProduct($event, modalConfirmDeletion)" (edit)="onEditProduct($event, modalUpdateProduct, productFormEdit)"></app-product-list-item></li>
+            <li class="list-group-item li-list-item" *ngIf="product"><app-product-list-item [productItem]="product" (delete)="onDeleteProduct($event, modalConfirmDeletion)" (edit)="onEditProduct($event, modalUpdateProduct, modalUpdateService)"></app-product-list-item></li>
         </ul>
     </div>
   </div>
@@ -65,10 +43,28 @@
       </button>
     </div>
     <div class="modal-body">
-      <app-product-form #productFormEdit (ProductUpdated)="onProductUpdated($event)"></app-product-form>
+      <app-product-form #productFormEdit (ProductUpdated)="onProductUpdated($event)" (ProductFormLoaded)="onProductFormModalLoaded(productFormEdit)" (ProductFormClosed)="onProductFormClosed()"></app-product-form>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="editSave()">Salvar</button>
+        <button type="button" class="btn btn-primary" (click)="productFormEdit.SaveProduct()">Salvar</button> 
+        <button type="button" class="btn btn-secondary" (click)="editCancel()">Cancelar</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #modalUpdateService>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title">Editar</h5>
+      <button type="button" class="close" (click)="editCancel()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <app-service-form #serviceFormEdit (ServiceUpdated)="onProductUpdated($event)" (ServiceFormLoaded)="onServiceFormModalLoaded(serviceFormEdit)" (ServiceFormClosed)="onProductFormClosed()"></app-service-form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="serviceFormEdit.SaveService()">Salvar</button> 
         <button type="button" class="btn btn-secondary" (click)="editCancel()">Cancelar</button>
     </div>
   </div>
